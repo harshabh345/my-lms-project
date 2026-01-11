@@ -28,7 +28,8 @@ app.get("/", (req, res) => {
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://my-lms-project-roan.vercel.app"
+  "https://my-lms-project-roan.vercel.app",
+  "https://my-lms-project-silk.vercel.app"
 ];
 
 app.use(cors({
