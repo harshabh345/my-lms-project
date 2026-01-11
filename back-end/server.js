@@ -20,6 +20,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static("public"));
 
+// Default Root Route
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
 
 const allowedOrigins = [
   "http://localhost:5173",
