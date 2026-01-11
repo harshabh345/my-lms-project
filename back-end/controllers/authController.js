@@ -28,7 +28,7 @@ const registerUser = async (req, res) => {
         let profilePicture = req.body.profilePicture || ""; // Get from body
 
         if (req.file) {
-        
+
             const uploadedImage = await cloudinary.uploader.upload(req.file.path, {
                 folder: "user_profiles",
                 transformation: [{ width: 500, height: 500, crop: "limit" }],
@@ -45,8 +45,8 @@ const registerUser = async (req, res) => {
             role,
             profilePicture: profilePicture || "",
             phoneNumber,
-            gender: gender || "Other", // Default value
-            dateOfBirth,
+            gender: gender || "Other",
+            dateOfBirth: dateOfBirth || null, // ✅ Fix: Convert empty string to null
             address,
             isDeleted: false,
             deletedAt: null
@@ -68,7 +68,7 @@ const registerUser = async (req, res) => {
         if (role === "trainer") {
             Object.assign(userData, {
                 professionalTitle,
-                totalExperience,
+                totalExperience: totalExperience || null, // ✅ Fix: Convert empty string to null
                 socialLinks,
                 careerDescription
             });
@@ -85,7 +85,7 @@ const registerUser = async (req, res) => {
                 return res.status(400).json({ error: "Invalid access level provided." });
             }
         }
-        
+
         console.log("Before saving, profilePicture:", profilePicture);
 
         // Create and Save User
@@ -94,7 +94,7 @@ const registerUser = async (req, res) => {
 
         const savedUser = await User.findOne({ username });
         console.log("Saved User in DB:", savedUser);
-        
+
         res.status(201).json({ message: "User registered successfully", user });
 
     } catch (error) {
@@ -111,8 +111,8 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) return res.status(400).json({ message: "User not found" });
-          // ✅ Check if the user is banned
-          if (user.isBanned) {
+        // ✅ Check if the user is banned
+        if (user.isBanned) {
             return res.status(403).json({ message: "Your account has been banned. Contact support." });
         }
 
@@ -126,10 +126,10 @@ const loginUser = async (req, res) => {
         user.tokens = [{ token }];
         await user.save();
 
-        res.json({ 
-            message: "Login successful", 
-            token, 
-            user: { id: user._id, name: user.fullName, email: user.email, role: user.role } 
+        res.json({
+            message: "Login successful",
+            token,
+            user: { id: user._id, name: user.fullName, email: user.email, role: user.role }
         });
 
     } catch (error) {
