@@ -45,7 +45,7 @@ const testimonialsData = [
     testimonial:
       "The Next.js tips were incredibly useful. I implemented them in my real-world project.",
     image:
-      "https://watermark.lovepik.com/photo/20220316/large/lovepik-professional-business-woman-elite-image-picture_502367423.jpg",
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",
   },
   {
     id: 6,
