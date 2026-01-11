@@ -21,15 +21,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static("public"));
 
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://my-lms-project-roan.vercel.app"
+];
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: allowedOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.options("*", cors()); // Handle preflight requests globally
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Allow frontend
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  }
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Authorization, Content-Type");
   next();
